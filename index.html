@@ -53,18 +53,21 @@
   <div class="box">
     <h2>Reset Your Password</h2>
     <input type="password" id="new-password" placeholder="Enter your new password" />
-    <button onclick="resetPassword()">Reset Password</button>
+    <button id="reset-btn">Reset Password</button>
     <div class="message" id="message"></div>
   </div>
 
+  <!-- Supabase SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- 初始化和事件绑定代码 -->
   <script>
     const supabase = supabase.createClient(
       'https://atbymoirqyptjbemthvl.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0Ynltb2lycXlwdGpiZW10aHZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk2NTYyODIsImV4cCI6MjA2NTIzMjI4Mn0.hhcuy1O7o3m4dpjtkVZ-4IsMPRhyqyFOEdMSU2Aar9E'
     );
 
-    async function resetPassword() {
+    document.getElementById('reset-btn').addEventListener('click', async () => {
       const password = document.getElementById('new-password').value;
       const messageDiv = document.getElementById('message');
 
@@ -87,7 +90,7 @@
       } else {
         messageDiv.textContent = '✅ Password has been updated!';
       }
-    }
+    });
   </script>
 </body>
 </html>
