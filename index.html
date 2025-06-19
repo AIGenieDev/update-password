@@ -58,39 +58,34 @@
   </div>
 
   <!-- ✅ Supabase SDK -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const supabase = window.supabase.createClient(
+    'https://atbymoirqyptjbemthvl.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0Ynltb2lycXlwdGpiZW10aHZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk2NTYyODIsImV4cCI6MjA2NTIzMjI4Mn0.hhcuy1O7o3m4dpjtkVZ-4IsMPRhyqyFOEdMSU2Aar9E'
+  );
 
-  <!-- ✅ 初始化 Supabase 和绑定逻辑 -->
-  <script>
-    const supabase = window.supabase.createClient(
-      'https://atbymoirqyptjbemthvl.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0Ynltb2lycXlwdGpiZW10aHZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk2NTYyODIsImV4cCI6MjA2NTIzMjI4Mn0.hhcuy1O7o3m4dpjtkVZ-4IsMPRhyqyFOEdMSU2Aar9E'
-    );
+  document.getElementById('reset-btn').addEventListener('click', async () => {
+    const password = document.getElementById('new-password').value;
+    const messageDiv = document.getElementById('message');
 
-    document.getElementById('reset-btn').addEventListener('click', async () => {
-      const password = document.getElementById('new-password').value;
-      const messageDiv = document.getElementById('message');
+    const hash = window.location.hash.substring(1);
+    const params = new URLSearchParams(hash);
+    const access_token = params.get('access_token');
 
-      const hash = window.location.hash.substring(1);
-      const params = new URLSearchParams(hash);
-      const access_token = params.get('access_token');
+    if (!access_token) {
+      messageDiv.textContent = '❌ Invalid token. Please use the reset link in your email.';
+      return;
+    }
 
-      if (!access_token) {
-        messageDiv.textContent = '❌ Invalid token. Please use the reset link in your email.';
-        return;
-      }
+    const { error } = await supabase.auth.updateUser({ password }, { accessToken: access_token });
 
-      const { error } = await supabase.auth.updateUser(
-        { password },
-        { accessToken: access_token }
-      );
-
-      if (error) {
-        messageDiv.textContent = '❌ ' + error.message;
-      } else {
-        messageDiv.textContent = '✅ Password has been updated!';
-      }
-    });
-  </script>
+    if (error) {
+      messageDiv.textContent = '❌ ' + error.message;
+    } else {
+      messageDiv.textContent = '✅ Password has been updated!';
+    }
+  });
+</script>
 </body>
 </html>
